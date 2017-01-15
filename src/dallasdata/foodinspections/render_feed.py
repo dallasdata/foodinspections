@@ -28,7 +28,7 @@ import argparse
 import collections
 import csv
 from feedgen.feed import FeedGenerator
-from foodscores.inspection import Inspection
+from dallasdata.foodinspections.inspection import Inspection
 import hashlib
 import logging
 import os.path

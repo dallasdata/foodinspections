@@ -23,15 +23,15 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='foodscores',
+    name='dallasdata_foodinspections',
     version='0.1',
     author='Peter Griess',
     author_email='pg@std.in',
     package_dir={'': 'src'},
-    packages=['foodscores'],
-    scripts=[
-        'src/foodscores/download_scores.py',
-        'src/foodscores/union_scores.py',
-        'src/foodscores/render_feed.py',
+    packages=['dallasdata.foodinspections'],
+    install_requires=[
+        'feedgen',
+        'lxml',
+        'pytz',
     ],
 )

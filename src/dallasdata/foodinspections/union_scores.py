@@ -25,7 +25,7 @@
 import argparse
 import datetime
 import csv
-from foodscores.inspection import Inspection
+from dallasdata.foodinspections.inspection import Inspection
 import logging
 import os.path
 import sys

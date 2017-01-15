@@ -34,13 +34,13 @@ import argparse
 import contextlib
 import datetime
 import csv
-from foodscores.inspection import Inspection
+from dallasdata.foodinspections.inspection import Inspection
 import io
 import logging
 import lxml.etree
 import os.path
-import urllib
-import urllib2
+import urllib.parse
+import urllib.request
 import re
 import sys
 
@@ -94,18 +94,20 @@ def inspections_by_zipcode(zipcode):
         logging.debug('fetching page {} for zip {}'.format(page_num, zipcode))
 
         if page_num > 1:
-            url = base_url + '?' + urllib.urlencode({'PageNum_q_search': page_num})
+            url = base_url + '?' + urllib.parse.urlencode(
+                    {'PageNum_q_search': page_num})
             data = None
         else:
             url = base_url
-            data = urllib.urlencode({
+            data = urllib.parse.urlencode({
                     'NAME': '',
                     'STNO': '',
                     'STNAME': '',
                     'ZIP': zipcode,
                     'Submit': 'Search+Scores'})
 
-        with contextlib.closing(od.open(url, data)) as r:
+        with contextlib.closing(
+                urllib.request.urlopen(url, data)) as r:
             et = lxml.etree.parse(io.BytesIO(r.read()), lxml.etree.HTMLParser())
             t = et.xpath('//body/table')[0]
 
