@@ -64,9 +64,7 @@ class Inspection(object):
                 'inspection_score': self.score,
                 'inspection_type': self.inspection_type,
         }
-        for k, v in d.iteritems():
-            if type(v) == unicode:
-                v = v.encode('utf-8', 'replace')
+        for k, v in d.items():
             d[k] = v
 
         return d
@@ -74,13 +72,13 @@ class Inspection(object):
     @staticmethod
     def from_dict(d):
         return Inspection(
-                name=unicode(d['name'], 'utf-8', 'replace'),
-                address=unicode(d['address_street'], 'utf-8', 'replace'),
-                suite=unicode(d['address_suite'], 'utf-8', 'replace'),
-                zipcode=unicode(d['address_zip'], 'utf-8', 'replace'),
+                name=d['name'],
+                address=d['address_street'],
+                suite=d['address_suite'],
+                zipcode=d['address_zip'],
                 date=datetime.datetime.strptime(d['inspection_date'], '%Y-%m-%d'),
                 score=int(d['inspection_score']),
-                inspection_type=unicode(d['inspection_type'], 'utf-8', 'replace'))
+                inspection_type=d['inspection_type'])
 
 
     def __eq__(self, other):

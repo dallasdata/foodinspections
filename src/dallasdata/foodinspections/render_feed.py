@@ -1,4 +1,4 @@
-#!/bin/env python2.7
+#!/bin/env python3
 #
 # The MIT License (MIT)
 #
@@ -129,9 +129,9 @@ Food inspection scores from the official City of Dallas dataset; updated daily
         fe.published(TZ.localize(i.date))
 
     if args.format == 'atom':
-        print(fg.atom_str(pretty=True))
+        print(str(fg.atom_str(pretty=True), encoding='utf-8'))
     else:
-        print(fg.rss_str(pretty=True))
+        print(str(fg.rss_str(pretty=True), encoding='utf-8'))
 
 
 if __name__ == '__main__':

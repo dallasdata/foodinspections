@@ -1,4 +1,4 @@
-#!/bin/env python2.7
+#!/bin/env python3
 #
 # The MIT License (MIT)
 #
@@ -84,10 +84,10 @@ def inspections_by_zipcode(zipcode):
 
     base_url = 'http://www2.dallascityhall.com/FoodInspection/SearchScoresAction.cfm'
 
-    od = urllib2.OpenerDirector()
-    od.add_handler(urllib2.ProxyHandler())
-    od.add_handler(urllib2.HTTPCookieProcessor())
-    od.add_handler(urllib2.HTTPHandler())
+    od = urllib.request.OpenerDirector()
+    od.add_handler(urllib.request.ProxyHandler())
+    od.add_handler(urllib.request.HTTPCookieProcessor())
+    od.add_handler(urllib.request.HTTPHandler())
 
     page_num = 1
     while True:
@@ -104,10 +104,9 @@ def inspections_by_zipcode(zipcode):
                     'STNO': '',
                     'STNAME': '',
                     'ZIP': zipcode,
-                    'Submit': 'Search+Scores'})
+                    'Submit': 'Search+Scores'}).encode('utf-8')
 
-        with contextlib.closing(
-                urllib.request.urlopen(url, data)) as r:
+        with contextlib.closing(od.open(url, data)) as r:
             et = lxml.etree.parse(io.BytesIO(r.read()), lxml.etree.HTMLParser())
             t = et.xpath('//body/table')[0]
 
@@ -124,9 +123,7 @@ def inspections_by_zipcode(zipcode):
                         zip(
                             fields,
                             [clean_text(node_text(td)) for td in tr.xpath('td')]))
-                for k, v in d.iteritems():
-                    if type(v) == str:
-                        v = unicode(v, 'utf-8', 'replace')
+                for k, v in d.items():
                     d[k] = v
 
                 yield Inspection(
@@ -158,11 +155,6 @@ def main(argv):
     logging.basicConfig(
             level=logging.ERROR - args.verbosity * 10,
             format='{}: %(message)s'.format(ap.prog))
-
-    od = urllib2.OpenerDirector()
-    od.add_handler(urllib2.ProxyHandler())
-    od.add_handler(urllib2.HTTPCookieProcessor())
-    od.add_handler(urllib2.HTTPHandler())
 
     inspections = set()
     for z in [
