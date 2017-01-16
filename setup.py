@@ -34,4 +34,11 @@ setup(
         'lxml',
         'pytz',
     ],
+    entry_points={
+        'console_scripts': [
+            'download_scores = dallasdata.foodinspections.download_scores:main',
+            'render_feed = dallasdata.foodinspections.render_feed:main',
+            'union_scores = dallasdata.foodinspections.union_scores:main',
+        ],
+    },
 )

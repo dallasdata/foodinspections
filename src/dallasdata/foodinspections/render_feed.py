@@ -77,7 +77,7 @@ def get_inspections_to_feed(stream, num_entries, flavor):
     return inspections_to_feed[:num_entries]
 
 
-def main(argv):
+def main(argv=sys.argv):
     ap = argparse.ArgumentParser(
         description='''
 Render RSS and Atom feeds from a CSV of food inspection data.

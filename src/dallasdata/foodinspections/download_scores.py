@@ -141,7 +141,7 @@ def inspections_by_zipcode(zipcode):
             page_num += 1
 
 
-def main(argv):
+def main(argv=sys.argv):
     ap = argparse.ArgumentParser(
         description='''
     Download food inspection scores from the City of Dallas website.

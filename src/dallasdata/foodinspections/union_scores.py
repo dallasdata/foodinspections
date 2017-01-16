@@ -31,7 +31,7 @@ import os.path
 import sys
 
 
-def main(argv):
+def main(argv=sys.argv):
     ap = argparse.ArgumentParser(
         description='''
 Given CSV files from download-scores, emit a CSV file that is the union of all
