@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash
 #
 # The MIT License (MIT)
 #
@@ -40,6 +40,9 @@ die() {
 cleanup() {
     rm -fr $WORKDIR
 }
+
+set -e
+set -o pipefail
 
 trap cleanup EXIT
 
