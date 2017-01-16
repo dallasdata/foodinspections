@@ -67,13 +67,21 @@ shift
     git reset --hard origin/master ;
     git clean -dfx ;
     git pull --rebase origin master ;
+    virtualenv env ;
+    ./env/bin/pip install -r ./requirements.txt ;
 )
 
 # Download scores
-$DIRNAME/download-scores -vvvvv >$WORKDIR/scores-new.csv
-$DIRNAME/union-scores -vvvvv \
-    $gh_pages_workdir/scores.csv $WORKDIR/scores-new.csv \
-    >$WORKDIR/scores-merged.csv
+$DIRNAME/../env/bin/download_scores -vvvvv >$WORKDIR/scores-new.csv
+
+if [[ -f $gh_pages_workdir/scores.csv ]] ; then
+    $DIRNAME/../env/bin/union_scores -vvvvv \
+        $gh_pages_workdir/scores.csv \
+        $WORKDIR/scores-new.csv \
+        >$WORKDIR/scores-merged.csv
+else
+    cp $WORKDIR/scores-new.csv $WORKDIR/scores-merged.csv
+fi
 
 if diff $gh_pages_workdir/scores.csv $WORKDIR/scores-merged.csv >/dev/null ; then
     log "no change to scores; not generating feed"
@@ -82,10 +90,10 @@ fi
 
 cp -f $WORKDIR/scores-merged.csv $gh_pages_workdir/scores.csv
 cat $gh_pages_workdir/scores.csv | \
-    $DIRNAME/render-feed -vvvvv -n 100 -f atom all \
+    $DIRNAME/../env/bin/render_feed -vvvvv -n 100 -f atom all \
     >$gh_pages_workdir/feed.atom.xml
 cat $gh_pages_workdir/scores.csv | \
-    $DIRNAME/render-feed -vvvvv -n 100 -f atom failures \
+    $DIRNAME/../env/bin/render_feed -vvvvv -n 100 -f atom failures \
     >$gh_pages_workdir/feed-failures.atom.xml
 
 (
