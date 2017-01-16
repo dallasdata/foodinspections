@@ -56,9 +56,9 @@ shift
 # Clean up the gh-pages repo
 (
     cd $gh_pages_workdir ;
-    git reset --hard origin/gh-pages ;
+    git reset --hard ;
     git clean -dfx ;
-    git pull --rebase origin gh-pages ;
+    git pull --rebase ;
 )
 
 # Clean up the local repo
@@ -91,5 +91,5 @@ cat $gh_pages_workdir/scores.csv | \
 (
     cd $gh_pages_workdir ;
     git commit -am "Automated update to dataset" ;
-    git push origin gh-pages ;
+    git push origin HEAD:master ;
 )
