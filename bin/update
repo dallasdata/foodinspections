@@ -56,17 +56,17 @@ shift
 # Clean up the gh-pages repo
 (
     cd $gh_pages_workdir ;
-    git reset --hard ;
-    git clean -dfx ;
+    [[ $(git status -s -uno | wc -l) -eq 0 ]] || \
+        die "$gh_pages_workdir is not clean" ;
     git pull --rebase ;
 )
 
 # Clean up the local repo
 (
     cd $DIRNAME/.. ;
-    git reset --hard origin/master ;
-    git clean -dfx ;
-    git pull --rebase origin master ;
+    [[ $(git status -s -uno | wc -l) -eq 0 ]] || \
+        die "$gh_pages_workdir is not clean" ;
+    git pull --rebase ;
     virtualenv env ;
     ./env/bin/pip install -r ./requirements.txt ;
 )
