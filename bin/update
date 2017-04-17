@@ -65,7 +65,7 @@ shift
 (
     cd $DIRNAME/.. ;
     [[ $(git status -s -uno | wc -l) -eq 0 ]] || \
-        die "$gh_pages_workdir is not clean" ;
+        die "local repo is not clean" ;
     git pull --rebase ;
     virtualenv env ;
     ./env/bin/pip install -r ./requirements.txt ;
@@ -74,27 +74,27 @@ shift
 # Download scores
 $DIRNAME/../env/bin/download_scores -vvvvv >$WORKDIR/scores-new.csv
 
-if [[ -f $gh_pages_workdir/scores.csv ]] ; then
+if [[ -f $gh_pages_workdir/foodscores/foodscores.csv ]] ; then
     $DIRNAME/../env/bin/union_scores -vvvvv \
-        $gh_pages_workdir/scores.csv \
+        $gh_pages_workdir/foodscores/foodscores.csv \
         $WORKDIR/scores-new.csv \
         >$WORKDIR/scores-merged.csv
+
+    if diff $gh_pages_workdir/foodscores/foodscores.csv $WORKDIR/scores-merged.csv >/dev/null ; then
+        log "no change to scores; not generating feed"
+        exit 0
+    fi
 else
     cp $WORKDIR/scores-new.csv $WORKDIR/scores-merged.csv
 fi
 
-if diff $gh_pages_workdir/scores.csv $WORKDIR/scores-merged.csv >/dev/null ; then
-    log "no change to scores; not generating feed"
-    exit 0
-fi
-
-cp -f $WORKDIR/scores-merged.csv $gh_pages_workdir/scores.csv
-cat $gh_pages_workdir/scores.csv | \
+cp -f $WORKDIR/scores-merged.csv $gh_pages_workdir/foodscores/foodscores.csv
+cat $gh_pages_workdir/foodscores/foodscores.csv | \
     $DIRNAME/../env/bin/render_feed -vvvvv -n 100 -f atom all \
-    >$gh_pages_workdir/feed.atom.xml
-cat $gh_pages_workdir/scores.csv | \
+    >$gh_pages_workdir/foodscores/feed.atom.xml
+cat $gh_pages_workdir/foodscores/foodscores.csv | \
     $DIRNAME/../env/bin/render_feed -vvvvv -n 100 -f atom failures \
-    >$gh_pages_workdir/feed-failures.atom.xml
+    >$gh_pages_workdir/foodscores/feed-failures.atom.xml
 
 (
     cd $gh_pages_workdir ;
